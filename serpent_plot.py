@@ -12,12 +12,23 @@ def serpent_chart(data, season="year", direction="outwards"):
     delta = data["y"]
     delta = delta/(2*delta.abs().max())
 
+    # Check datapoints per year
+    data["year"] = pd.DatetimeIndex(data["ts"]).year
+    avg_data_year = data[["year", "ts"]].groupby(["year"]).agg(["count"]).reset_index(drop=True).agg("mean").iloc[0]
+    data = data.drop(["year"], axis=1)
+    if(avg_data_year <= 12):
+        data_points = 12
+        data_unit = np.timedelta64(1,'M')
+    else:
+        data_points = 365 # FIX - Account for leap year
+        data_unit = np.timedelta64(1,'D')
+
     # Translate seasonality and add offset
     if(season=="year"):
-        season_ratio = 1/365 # FIX - Account for leap year
+        season_ratio = 1/data_points
 
         min_date = data["ts"].min()
-        offset = int((min_date - pd.to_datetime("01-01-"+str(min_date.year)))/np.timedelta64(1,'D'))
+        offset = int((min_date - pd.to_datetime("01-01-"+str(min_date.year)))/data_unit)
 
         rlabels = np.sort(np.unique(pd.DatetimeIndex(data["ts"]).year.to_numpy()))
 
@@ -69,8 +80,18 @@ data = pd.DataFrame(data={"ts":r, "y": noise})
 
 fig, ax = serpent_chart(data)
 
+fig.suptitle("Gaussian Noise (Serpent Chart)")
 fig.savefig("plots/noise.jpg")
 plt.close()
+
+plt.figure()
+data_series = data["y"]
+data_series.index = pd.DatetimeIndex(data["ts"]).to_pydatetime()
+data_series = pd.to_numeric(data_series, errors="coerce")
+data_series.sort_values()
+data_series.plot()
+plt.title("Gaussian Noise (Linear Plot)")
+plt.savefig("linear_plots/noise.jpg")
 
 # Australia low temperature
 data = pd.read_csv("datasets/australia_temp.csv")
@@ -78,13 +99,73 @@ data = data.tail(1500)
 
 fig, ax = serpent_chart(data)
 
+fig.suptitle("Australia Lowest Temperature (Serpent Chart)")
 fig.savefig("plots/australia_temp.jpg")
 plt.close()
+
+plt.figure()
+data_series = data["y"]
+data_series.index = pd.DatetimeIndex(data["ts"]).to_pydatetime()
+data_series = pd.to_numeric(data_series, errors="coerce")
+data_series.sort_values()
+data_series.plot()
+plt.title("Australia Lowest Temperature (Linear Plot)")
+plt.savefig("linear_plots/australia_temp.jpg")
 
 # Female births
 data = pd.read_csv("datasets/female_births.csv")
 
 fig, ax = serpent_chart(data)
 
+fig.suptitle("Female Births (Serpent Chart)")
 fig.savefig("plots/fem_births.jpg")
 plt.close()
+
+plt.figure()
+data_series = data["y"]
+data_series.index = pd.DatetimeIndex(data["ts"]).to_pydatetime()
+data_series = pd.to_numeric(data_series, errors="coerce")
+data_series.sort_values()
+data_series.plot()
+plt.title("Female Births (Linear Plot)")
+plt.savefig("linear_plots/fem_births.jpg")
+
+# Monthly Sunspots
+data = pd.read_csv("datasets/monthly-sunspots.csv")
+data["ts"] = pd.to_datetime(data["ts"], format="%Y-%m")
+data = data.tail(60)
+
+fig, ax = serpent_chart(data)
+
+fig.suptitle("Sunspots (Serpent Chart)")
+fig.savefig("plots/monthly_sunspots.jpg")
+plt.close()
+
+plt.figure()
+data_series = data["y"]
+data_series.index = pd.DatetimeIndex(data["ts"]).to_pydatetime()
+data_series = pd.to_numeric(data_series, errors="coerce")
+data_series.sort_values()
+data_series.plot()
+plt.title("Sunspots (Linear Plot)")
+plt.savefig("linear_plots/monthly_sunspots.jpg")
+
+#Shampoo Sales
+data = pd.read_csv("datasets/shampoo.csv")
+data["ts"] = pd.to_datetime(data["ts"], format="%Y-%m")
+data = data.tail(60)
+
+fig, ax = serpent_chart(data)
+
+fig.suptitle("Shampoo Sales (Serpent Chart)")
+fig.savefig("plots/shampoo.jpg")
+plt.close()
+
+plt.figure()
+data_series = data["y"]
+data_series.index = pd.DatetimeIndex(data["ts"]).to_pydatetime()
+data_series = pd.to_numeric(data_series, errors="coerce")
+data_series.sort_values()
+data_series.plot()
+plt.title("Shampoo Sales (Linear Plot)")
+plt.savefig("linear_plots/shampoo.jpg")
