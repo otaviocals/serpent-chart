@@ -106,7 +106,7 @@ plt.savefig("linear_plots/noise.jpg")
 data = pd.read_csv("datasets/australia_temp.csv")
 data = data.tail(1500)
 
-fig, ax = serpent_chart(data)
+fig, ax = serpent_chart(data, crossing_threshold=20)
 
 fig.suptitle("Australia Lowest Temperature (Serpent Chart)")
 fig.savefig("plots/australia_temp.jpg")
