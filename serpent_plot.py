@@ -197,3 +197,25 @@ data_series.sort_values()
 data_series.plot()
 plt.title("El Nino MEI (Linear Plot)")
 plt.savefig("linear_plots/el_nino.jpg")
+
+#Retail US
+data = pd.read_csv("datasets/retail_us.csv")
+data["ts"] = pd.to_datetime(data["ts"], format="%d-%m-%Y")
+data = data.loc[~(data["y"].isnull())]
+data["y"] = data["y"].pct_change()
+data = data.tail(60)
+
+fig, ax = serpent_chart(data)
+
+fig.suptitle("US Retail Sales Monthly Growth (Serpent Chart)")
+fig.savefig("plots/retail.jpg")
+plt.close()
+
+plt.figure()
+data_series = data["y"]
+data_series.index = pd.DatetimeIndex(data["ts"]).to_pydatetime()
+data_series = pd.to_numeric(data_series, errors="coerce")
+data_series.sort_values()
+data_series.plot()
+plt.title("US Retail Sales Monthly Growth (Linear Plot)")
+plt.savefig("linear_plots/retail.jpg")
