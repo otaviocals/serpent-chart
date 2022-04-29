@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
+import math
 import matplotlib.pyplot as plt
 
-def serpent_chart(data, season="year", direction="outwards", crossing_threshold=0.0, dpi=400):
+def serpent_chart(data, season="year", direction="outwards", crossing_threshold=0.0, dpi=200):
 
     data = data.reset_index(drop=True)
 
@@ -29,7 +30,7 @@ def serpent_chart(data, season="year", direction="outwards", crossing_threshold=
         season_ratio = 1/data_points
 
         min_date = data["ts"].min()
-        offset = int((min_date - pd.to_datetime("01-01-"+str(min_date.year)))/data_unit)
+        offset = math.ceil((min_date - pd.to_datetime("01-01-"+str(min_date.year)))/data_unit)
 
         rlabels = np.sort(np.unique(pd.DatetimeIndex(data["ts"]).year.to_numpy()))
 
@@ -181,7 +182,7 @@ plt.savefig("linear_plots/shampoo.jpg")
 #El Nino
 data = pd.read_csv("datasets/meiv2.csv")
 data["ts"] = pd.to_datetime(data["ts"], format="%Y-%m-%d")
-data = data.tail(480)
+data = data.tail(150)
 
 fig, ax = serpent_chart(data)
 
