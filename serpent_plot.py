@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import math
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 def serpent_chart(data, season="year", direction="outwards", crossing_threshold=0.0, dpi=200):
 
@@ -11,7 +12,7 @@ def serpent_chart(data, season="year", direction="outwards", crossing_threshold=
     data["ts"] = pd.to_datetime(data["ts"])
     r = pd.Series(data.index)
     delta = data["y"]
-    adj_crossing_threshold = crossing_threshold/(2*delta.abs().max())
+    adj_crossing_threshold = crossing_threshold/(delta.abs().max())
     delta = delta/(2*delta.abs().max())
 
     # Check datapoints per year
@@ -79,6 +80,11 @@ def serpent_chart(data, season="year", direction="outwards", crossing_threshold=
     for line in ax.get_ygridlines():
         line.set_alpha(0.5)
 
+    # Legend
+    blue_patch = mpatches.Patch(color='royalblue', label='y >= '+str(crossing_threshold), alpha=0.5)
+    red_patch = mpatches.Patch(color='tomato', label='y < '+str(crossing_threshold), alpha=0.5)
+    ax.legend(handles=[blue_patch, red_patch], loc="upper right", bbox_to_anchor=(1.3, 1.0))
+
     return fig, ax
 
 # Gaussian noise
@@ -106,7 +112,7 @@ plt.savefig("linear_plots/noise.jpg")
 data = pd.read_csv("datasets/australia_temp.csv")
 data = data.tail(1500)
 
-fig, ax = serpent_chart(data, crossing_threshold=20)
+fig, ax = serpent_chart(data, crossing_threshold=10.0)
 
 fig.suptitle("Australia Lowest Temperature (Serpent Chart)")
 fig.savefig("plots/australia_temp.jpg")
