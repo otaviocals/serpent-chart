@@ -1,0 +1,14 @@
+{
+    "continuous_deploy": {
+        "source": "ModelAcademy",
+        "deploy_mode": "semi_automatic",
+        "date": "20230310_1144",
+        "serving_framework": "kubernetes",
+        "model_files": {
+            "model_targz": {
+                "location": "S3",
+                "path": "path/to/file.tar.gz"
+            }
+        }
+    }
+}
