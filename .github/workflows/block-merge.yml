@@ -1,0 +1,21 @@
+name: Block Merge Based on Time
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+      - unlabeled
+  schedule:
+    - cron: "*/30 * * * *"
+
+jobs:
+  block:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: yykamei/block-merge-based-on-time@main
+        with:
+          timezone: America/Sao_Paulo
+          base-branches: "(default)"
+          prohibited-days-dates: "Sunday"
