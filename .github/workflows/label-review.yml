@@ -7,7 +7,7 @@ jobs:
   required-approvals:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - uses: lvegerano/label-required-approvals@main
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          configuration-path: /home/runner/work/serpent-chart/serpent-chart/.github/team-approvers.yml
