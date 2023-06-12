@@ -1,0 +1,13 @@
+name: label-required-approvals
+on:
+  pull_request_review:
+  pull_request:
+    types: [opened, reopened, labeled, unlabeled]
+jobs:
+  required-approvals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: lvegerano/label-required-approvals@main
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/configs/team-approvers.yml
