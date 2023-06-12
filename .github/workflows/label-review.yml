@@ -7,7 +7,7 @@ jobs:
   required-approvals:
     runs-on: ubuntu-latest
     steps:
-      uses: lvegerano/label-required-approvals@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        configureation-path: .github/workflows/team-approvers.yml
+      - uses: lvegerano/label-required-approvals@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configureation-path: .github/workflows/team-approvers.yml
