@@ -10,4 +10,4 @@ jobs:
       - uses: lvegerano/label-required-approvals@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          configureation-path: .github/configs/team-approvers.yml
+          configuration-path: .github/configs/team-approvers.yml
